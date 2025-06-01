@@ -1,4 +1,4 @@
-const items = [
+let items = [
   { name: "Oats Digestive Biscuits", quantity: "", selected: false },
   { name: "Gol Maal 50-50", quantity: "", selected: false },
   { name: "Jim Jam", quantity: "", selected: false },
@@ -136,7 +136,7 @@ const items = [
   { name: "Baking Soda ", quantity: "1", selected: false },
   { name: "Fabric gum", quantity: "1", selected: false },
 ];
-function renderItems(items) {
+function renderItems() {
   const div = document.getElementById("list");
   div.innerHTML = "";
   items.forEach((item) => {
@@ -169,13 +169,46 @@ function renderItems(items) {
 
     selectButton.addEventListener("click", () => {
       item.selected = !item.selected;
+      selectButton.textContent = "-";
       itemdiv.classList.toggle("selected", item.selected);
     });
   });
 }
 
-renderItems(items);
+renderItems();
 
+function addItem() {
+  const div = document.getElementById("list");
+  const newItemDiv = document.createElement("div");
+  newItemDiv.id = "new-item-input";
+  newItemDiv.class = "grocery-item";
+  const itemName = document.createElement("input");
+  itemName.id = "new-item-name";
+  itemName.type = "text";
+  itemName.placeholder = "Enter Item Name";
+  itemName.className = "item-name";
+  const btn = document.createElement("button");
+  btn.textContent = "Add";
+  btn.className = "select-item";
+  newItemDiv.appendChild(itemName);
+  newItemDiv.appendChild(btn);
+  div.appendChild(newItemDiv);
+  itemName.focus();
+  btn.addEventListener("click", () => {
+    const name = itemName.value;
+    if (name) {
+      items.push({
+        name: name,
+        quantity: "",
+        selected: false,
+      });
+      div.removeChild(newItemDiv);
+      renderItems();
+    }
+  });
+}
+
+document.getElementById("newItem").addEventListener("click", addItem);
 
 function exportToExcel() {
   const selectedItems = items.filter((item) => item.selected);
